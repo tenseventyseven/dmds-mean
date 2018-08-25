@@ -1,0 +1,321 @@
+<div ng-controller="adminController as admin">
+  <div class="page-header">
+    <h1 class="text-center">Member Admin</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="input-group">
+        <input type="text" class="form-control input-lg col-sm-12" placeholder="Search for name..." ng-model="admin.nameInput" ng-disabled="admin.doAdd || admin.doFind || admin.showAttendance" uib-typeahead="name for name in admin.memberNames | filter:$viewValue:admin.nameFilter | limitTo:10"
+          typeahead-on-select="admin.findMemberClicked()">
+        <div class="input-group-btn">
+          <button class="btn btn-info btn-lg"><i class="glyphicon glyphicon-search"></i>
+                    </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-warning btn-lg pull-right" ng-click="admin.showAttendanceClicked()" ng-disabled="admin.doAdd || admin.doFind || admin.showAttendance"><span class="glyphicon glyphicon-list-alt"></span></button>
+      <button type="button" class="btn btn-success btn-lg pull-right" ng-click="admin.addMemberClicked()" ng-disabled="admin.doAdd || admin.doFind || admin.showAttendance"><span class="glyphicon glyphicon-plus"></span></button>
+    </div>
+  </div>
+  <br>
+  <form class="form-horizontal" ng-if="admin.showAttendance">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-8">
+            <h3>Today's Attendance</h3>
+          </div>
+          <div class="col-xs-4">
+            <button type="button" class="btn btn-default pull-right" ng-if="admin.showAttendance" ng-click="admin.cancelAttendanceClicked()"><span class="glyphicon glyphicon-remove"></span></button>
+            <button type="button" class="btn btn-info pull-right" ng-click="admin.refreshAttendanceClicked()"><span class="glyphicon glyphicon-refresh"></span></button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <div class="col-sm-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Time</th>
+                  <th>Activity</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tr ng-repeat="attendance in admin.todayAttendance">
+                <td>{{ attendance.name }}</td>
+                <td>{{ attendance.time | date:'medium'}}</td>
+                <td>{{ attendance.activity }}</td>
+                <td>{{ attendance.note }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form class="form-horizontal" ng-if="admin.doAdd || admin.doFind">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="min-height: 60px;">
+        <div class="row">
+          <div class="col-xs-3">
+            <img ng-src="{{admin.memberData.memberId}}.jpg" alt="Missing ID photo" class="img-thumbnail">
+          </div>
+          <div class="col-xs-6">
+            <h4>{{ admin.memberData.person.name }} <br> <small>#{{ admin.memberData.memberId }}</small></h4>
+          </div>
+          <div class="col-xs-3">
+            <button type="button" class="btn btn-default pull-right" ng-if="admin.doAdd || admin.doFind" ng-click="admin.cancelMemberClicked()"><span class="glyphicon glyphicon-remove"></span></button>
+            <button type="button" class="btn btn-success pull-right" ng-disabled="!admin.memberData.person.name" ng-if="admin.doAdd || !admin.readOnly" ng-click="admin.saveMemberClicked()"><span class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-info pull-right" ng-if="admin.doFind && admin.readOnly" ng-click="admin.editMemberClicked()"><span class="glyphicon glyphicon-edit"></span></button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <uib-tabset active="active">
+          <uib-tab index="0" heading="Person">
+            <fieldset ng-disabled="admin.readOnly">
+              <div class="panel-body">
+                <div class="form-group" ng-class="{'has-error': admin.doAdd}">
+                  <label for="nameInput" class="col-sm-2 control-label">Name:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="admin.memberData.person.name" id="nameInput">
+                    <p ng-show="admin.doAdd" class="help-block small">Unique name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static small">Address</p>
+                  </div>
+                  <label for="streetInput" class="col-sm-2 control-label">Street:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="admin.memberData.person.address.street" id="streetInput">
+                    <br>
+                  </div>
+                  <label for="cityInput" class="col-sm-2 control-label">City:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="admin.memberData.person.address.city" id="cityInput">
+                    <br>
+                  </div>
+                  <label for="postCodeInput" class="col-sm-2 control-label">Postcode:</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" ng-model="admin.memberData.person.address.postcode" id="postCodeInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static small">Contact</p>
+                  </div>
+                  <label for="homeInput" class="col-sm-2 control-label">Home:</label>
+                  <div class="col-sm-10">
+                    <input type="tel" class="form-control" ng-model="admin.memberData.person.contact.home" id="homeInput">
+                    <br>
+                  </div>
+                  <label for="mobileInput" class="col-sm-2 control-label">Mobile:</label>
+                  <div class="col-sm-10">
+                    <input type="tel" class="form-control" ng-model="admin.memberData.person.contact.mobile" id="mobileInput">
+                    <br>
+                  </div>
+                  <label for="emailInput" class="col-sm-2 control-label">Email:</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" ng-model="admin.memberData.person.contact.email" id="emailInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="occupationInput" class="col-sm-2 control-label">Occupation:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="admin.memberData.person.occupation" id="occupationInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="dobInput" class="col-sm-2 control-label">Date of Birth:</label>
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control" ng-model="admin.memberDates.dob" id="dobInput">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </uib-tab>
+          <uib-tab index="1" heading="Notes">
+            <fieldset ng-disabled="admin.readOnly">
+              <div class="panel-body">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="privateCommentsInput">Private Comments:</label>
+                    <textarea class="form-control" rows="5" ng-model="admin.memberData.notes.privateComments" id="privateCommentsInput"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="messageForMemberInput">Message for Member:</label>
+                    <textarea class="form-control" rows="1" ng-model="admin.memberData.notes.messageForMember" id="messageForMemberInput"></textarea>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </uib-tab>
+          <uib-tab index="2" heading="Membership">
+            <fieldset ng-disabled="admin.readOnly">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-5">
+                    <label class="checkbox-inline">
+                                            <input type="checkbox" ng-model="admin.memberData.membership.active">Active</label>
+                  </div>
+                  <div class="col-sm-5">
+                    <label class="checkbox-inline">
+                                            <input type="checkbox" ng-model="admin.memberData.membership.casual">Casual</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="advertisingInput" class="col-sm-2 control-label">Found By:</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" ng-model="admin.memberData.membership.advertising" id="advertisingInput">
+                                            <option>Other</option>
+                                            <option>Member Referred</option>
+                                            <option>Internet</option>
+                                            <option>Leaflet</option>
+                                            <option>Walked Past</option>
+                                            <option>Friend</option>
+                                        </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="commencedInput" class="col-sm-2 control-label">Commenced:</label>
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control" ng-model="admin.memberDates.commenced" id="commencedInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Last Attended:</label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static">{{ admin.memberDates.lastAttended | date }}</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="lockerNumberInput" class="col-sm-2 control-label">Locker Number:</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" ng-model="admin.memberData.membership.lockerNumber" id="lockerNumberInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="lockerExpiryInput" class="col-sm-2 control-label">Locker Expiry:</label>
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control" ng-model="admin.memberDates.lockerExpiry" id="lockerExpiryInput">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </uib-tab>
+          <uib-tab index="3" heading="Fees">
+            <fieldset ng-disabled="admin.readOnly">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static small">Expiry Dates</p>
+                  </div>
+                  <label class="col-sm-2 control-label">Training Fees:</label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static">{{ admin.memberDates.trainingFeesExpiry | date }}</p>
+                  </div>
+                  <label class="col-sm-2 control-label">Insurance Fees:</label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static">{{ admin.memberDates.insuranceFeesExpiry | date }}</p>
+                    <br>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static small">Training Fees</p>
+                  </div>
+                  <div class="col-sm-12">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Start Date</th>
+                          <th>Price</th>
+                          <th>Days</th>
+                          <th>Months</th>
+                          <th>Description</th>
+                          <th>
+                            <button type="button" class="btn btn-success pull-right" ng-click="admin.addTrainingFeeClicked()" ng-disabled="admin.doAdd"><span class="glyphicon glyphicon-plus"></span></button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tr ng-repeat="fee in admin.memberTrainingFees">
+                        <td>{{ fee.startDate | date }}</td>
+                        <td>{{ fee.price | currency }}</td>
+                        <td>{{ fee.days }}</td>
+                        <td>{{ fee.months }}</td>
+                        <td>{{ fee.description }}</td>
+                        <td>
+                          <a href="#" role="button" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-minus" ng-click="admin.deleteTrainingFeeClicked($index)"></span></a>
+                          <a href="#" role="button" class="btn btn-warning pull-right"><span class="glyphicon glyphicon-pencil" ng-click="admin.editTrainingFeeClicked($index)"></span></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <label class="col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static small">Insurance Fees</p>
+                  </div>
+                  <div class="col-sm-12">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Start Date</th>
+                          <th>Price</th>
+                          <th>Months</th>
+                          <th>
+                            <button type="button" class="btn btn-success pull-right" ng-click="admin.addInsuranceFeeClicked()" ng-disabled="admin.doAdd"><span class="glyphicon glyphicon-plus"></span></button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tr ng-repeat="fee in admin.memberInsuranceFees">
+                        <td>{{ fee.startDate | date }}</td>
+                        <td>{{ fee.price | currency }}</td>
+                        <td>{{ fee.months }}</td>
+                        <td>
+                          <a href="#" role="button" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-minus" ng-click="admin.deleteInsuranceFeeClicked($index)"></span></a>
+                          <a href="#" role="button" class="btn btn-warning pull-right"><span class="glyphicon glyphicon-pencil" ng-click="admin.editInsuranceFeeClicked($index)"></span></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </uib-tab>
+          <uib-tab index="4" heading="Attendance">
+            <div class="panel-body">
+              <div class="col-sm-12">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Session</th>
+                      <th>Activity</th>
+                    </tr>
+                  </thead>
+                  <tr ng-repeat="attendance in admin.memberAttendances">
+                    <td>{{ attendance.time | date : "medium" }}</td>
+                    <td>{{ attendance.session }}</td>
+                    <td>{{ attendance.activity }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+    </div>
+    <button type="button" class="btn btn-danger pull-right" ng-if="admin.doFind" ng-click="admin.deleteMemberClicked()">Delete <span class="glyphicon glyphicon-trash"></span></button>
+  </form>
+</div>

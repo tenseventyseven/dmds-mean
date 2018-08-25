@@ -1,0 +1,12 @@
+[Unit]
+Description=DMDs admin/checkin service (MEAN version)
+After=network.target mongodb.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/dmds-mean
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

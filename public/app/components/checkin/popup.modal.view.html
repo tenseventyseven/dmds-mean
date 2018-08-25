@@ -1,0 +1,13 @@
+<div>
+  <div class="modal-header">
+    <h2 class="modal-title text-center" id="modal-title">{{ $ctrl.activity }}</h2>
+    <h5 class="text-center">{{ $ctrl.session }} Session</h5>
+  </div>
+  <div class="modal-body text-center" id="modal-body">
+    <h4>Dave says: <em>{{ $ctrl.quote }}</em></h4>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success btn-lg" type="button" ng-click="$ctrl.ok()">OK <span class="glyphicon glyphicon-ok"></span></button>
+    <button class="btn btn-danger btn-lg" type="button" ng-click="$ctrl.cancel()">Cancel <span class="glyphicon glyphicon-remove"></button>
+  </div>
+</div>

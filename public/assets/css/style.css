@@ -1,0 +1,48 @@
+body {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #007399;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+#classes-panel {
+  margin-top: 10px;
+}
+
+.page-header {
+  padding: 10px;
+  background-color: #5BC0DE;
+  color: #FFFFFF;
+  border: 0px solid;
+  border-radius: 5px;
+}
+
+body.modal-open .modal {
+  display: flex !important;
+  height: 100%;
+}
+
+body.modal-open .modal .modal-dialog {
+  margin: auto;
+}
+
+.modal-header {
+  background: #007399;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: #FFFFFF;
+}
+
+.dropdown-menu {
+  font-size: 20px;
+}
+
+.img-thumbnail {
+  height: 100px;
+  width: 150px;
+  display: table-cell;
+  vertical-align: middle;
+}

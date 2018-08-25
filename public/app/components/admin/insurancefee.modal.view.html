@@ -1,0 +1,36 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title text-center" id="modal-title">Insurance Fee</h3>
+  </div>
+  <div class="modal-body row">
+    <div class="form-group">
+      <label for="startDateInput" class="col-sm-2 control-label">Start Date:</label>
+      <div class="col-sm-10">
+        <input type="date" class="form-control" ng-model="$ctrl.startDate" id="startDateInput">
+        <br>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="priceInput" class="col-sm-2 control-label">Price:</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <span class="input-group-addon">$</span>
+          <input type="number" class="form-control" ng-model="$ctrl.price" id="priceInput">
+        </div>
+        <br>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="monthsInput" class="col-sm-2 control-label">Months:</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" ng-model="$ctrl.months" id="monthsInput">
+        <br>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" type="button" ng-disabled="!$ctrl.startDate || !($ctrl.days || $ctrl.months)" ng-click="$ctrl.save()">Save <span class="glyphicon glyphicon-ok"></span></button>
+  <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel <span class="glyphicon glyphicon-remove"></span></button>
+</div>
+</div>

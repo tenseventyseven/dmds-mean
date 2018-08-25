@@ -1,0 +1,15 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-bootstrap": "latest",
+    "lodash": "latest",
+    "angular-animate": "latest",
+    "angular-sanitize": "latest",
+    "jquery": "latest",
+    "angular-list-group": "latest"
+  }
+}

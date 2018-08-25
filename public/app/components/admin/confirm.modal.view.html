@@ -1,0 +1,13 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title text-center" id="modal-title">Confirmation</h3>
+  </div>
+  <div class="modal-body">
+    <p>{{$ctrl.message}}</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-if="$ctrl.type == 'okCancel'" ng-click="$ctrl.ok()">OK <span class="glyphicon glyphicon-ok"></span></button>
+    <button class="btn btn-danger" type="button" ng-if="$ctrl.type == 'deleteCancel'" ng-click="$ctrl.delete()">Delete <span class="glyphicon glyphicon-trash"></span></button>
+    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel <span class="glyphicon glyphicon-remove"></span></button>
+  </div>
+</div>

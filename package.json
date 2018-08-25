@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "main": "server.js",
+  "dependencies": {
+    "bluebird": "latest",
+    "body-parser": "latest",
+    "express": "latest",
+    "mongoose": "latest",
+    "morgan": "latest"
+  }
+}

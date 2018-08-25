@@ -1,0 +1,59 @@
+<div ng-controller="checkinController as checkin">
+  <div class="page-header">
+    <h1 class="text-center">Welcome to DMD's</h1>
+    <h4 class="text-center">Nothing soft comes out of Brunswick</h4>
+  </div>
+  <div class="input-group">
+    <input type="text" placeholder="Search for name..." ng-disabled="checkin.isFound" ng-model="checkin.nameInput" uib-typeahead="member for member in checkin.memberNames | filter:$viewValue:checkin.nameFilter | limitTo:15" class="form-control input-lg" typeahead-on-select="checkin.findClicked()">
+    <div class="input-group-btn">
+      <button class="btn btn-info btn-lg"><i class="glyphicon glyphicon-search"></i>
+            </button>
+    </div>
+  </div>
+  <br>
+  <div ng-show=checkin.isFound>
+    <div class="panel panel-primary">
+      <div class="panel-heading" style="min-height: 60px;">
+        <div class="col-xs-3">
+          <img data-ng-src="{{checkin.memberPhoto}}" alt="Missing ID photo" class="img-thumbnail">
+        </div>
+        <div class="col-xs-9">
+          <h2>Which session are you attending?</h2>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="alert alert-warning text-center" ng-if="checkin.messageForMember != undefined">
+              <h3>{{ checkin.messageForMember }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <h5 class="text-center">Classes</h5>
+            <list-group class="btn-lg" id="classactivity-list-group" items="checkin.classActivities" selectable after-selection-change="checkin.deselectOtherActivities()" selected-items="checkin.selectedActivity"></list-group>
+          </div>
+          <div class="col-xs-6">
+            <h5 class="text-center">Other</h5>
+            <list-group class="btn-lg" id="otheractivity-list-group" items="checkin.otherActivities" selectable after-selection-change="checkin.deselectClassActivities()" selected-items="checkin.selectedActivity"></list-group>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="alert alert-danger text-center" ng-if="checkin.feesDue != undefined">
+              <h3>{{ checkin.feesDue }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="pull-right">
+              <button type="button" ng-click="checkin.okClicked()" ng-disabled="checkin.selectedActivity == undefined || checkin.selectedActivity.length <= 0" class="btn btn-success btn-lg">OK <span class="glyphicon glyphicon-ok"></span></button>
+              <button class="btn btn-danger btn-lg" type="button" ng-click="checkin.cancelClicked()">Cancel <span class="glyphicon glyphicon-remove"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
