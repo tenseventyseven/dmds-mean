@@ -1,5 +1,5 @@
 # Daily local database backup
 00 06 * * * /bin/sh -c "/usr/bin/mongodump -o /opt/dmds-mean/backups/`date +\%a` -d dmds"
 # Daily Google Drive backup
-00 00 * * * cd /opt/dmds-mean && grive --ignore node_modules
+00 00 * * * cd /opt/dmds-mean && grive --ignore '(?=^.git$)|(?=^node_modules$)|(?=^public/assets/libs$)'
 #
