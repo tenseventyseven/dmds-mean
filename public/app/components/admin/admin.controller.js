@@ -15,6 +15,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   vm.memberTrainingFees = [];
   vm.memberInsuranceFees = [];
   vm.memberAttendances = [];
+  vm.memberPhoto = undefined;
   vm.nameInput = '';
   vm.doFind = false;
   vm.doAdd = false;
@@ -209,6 +210,15 @@ function adminController(dateService, memberService, trainingFeeService, insuran
           if (vm.memberData.membership.lockerExpiryDate) {
             vm.memberDates.lockerExpiry = new Date(vm.memberData.membership.lockerExpiryDate);
           }
+
+          // Get member photo
+          memberService
+            .getMemberPhoto(vm.memberData.memberId)
+            .then(function(response) {
+              vm.memberPhoto = 'data:image/jpeg;base64,' + _arrayBufferToBase64(response.data)
+            }, function(response) {
+              // No member photo, do nothing
+            });
 
           // Get member training fees
           getTrainingFees(vm.memberData.memberId);
