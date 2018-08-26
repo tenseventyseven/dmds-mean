@@ -217,7 +217,8 @@ function adminController(dateService, memberService, trainingFeeService, insuran
             .then(function(response) {
               vm.memberPhoto = 'data:image/jpeg;base64,' + _arrayBufferToBase64(response.data)
             }, function(response) {
-              // No member photo, do nothing
+              // No member photo
+              vm.memberPhoto = undefined;
             });
 
           // Get member training fees
@@ -700,6 +701,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     vm.readOnly = false;
     vm.showAttendance = false;
     vm.todayAttendance = [];
+    vm.memberPhoto = undefined;
 
   }
 }

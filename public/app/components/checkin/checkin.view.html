@@ -15,7 +15,7 @@
     <div class="panel panel-primary">
       <div class="panel-heading" style="min-height: 60px;">
         <div class="col-xs-3">
-          <img data-ng-src="{{checkin.memberPhoto}}" alt="Missing ID photo" class="img-thumbnail">
+          <img ng-src="{{ checkin.memberPhoto || '//:0' }}" alt="Missing ID photo" class="img-thumbnail">
         </div>
         <div class="col-xs-9">
           <h2>Which session are you attending?</h2>

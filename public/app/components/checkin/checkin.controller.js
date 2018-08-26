@@ -111,7 +111,8 @@ function checkinController(dateService, memberService, activityService, popupMod
             .then(function(response) {
               vm.memberPhoto = 'data:image/jpeg;base64,' + _arrayBufferToBase64(response.data)
             }, function(response) {
-              // No member photo, do nothing
+              // No member photo
+              vm.memberPhoto = undefined;
             });
         })
         .then(function() {
