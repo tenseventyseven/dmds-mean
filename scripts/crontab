@@ -3,4 +3,4 @@
 # Daily create thumbnails
 00 04 * * * cd /opt/dmds-mean && scripts/create_thumbnails.sh
 # Daily Google Drive backup
-00 05 * * * cd /opt/dmds-mean && grive --ignore '(?=^.git$)|(?=^node_modules$)|(?=^public/assets/libs$)'
+00 05,06 * * * cd /opt/dmds-mean && grive --ignore '(?=^.git$)|(?=^node_modules$)|(?=^public/assets/libs$)'
