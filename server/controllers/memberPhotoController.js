@@ -9,8 +9,12 @@ module.exports = {
     var original = __dirname + '/../../photos/' + req.params.memberId;
 
     // get thumbnail if exists, else original
-    // try both JPG and jpg
-    if (fs.existsSync(thumbnail + '.JPG')) {
+    // try no extension, JPG then jpg
+    if (fs.existsSync(thumbnail)) {
+      res.sendFile(req.params.memberId, {
+        root: __dirname + '/../../photos/thumbnails'
+      });
+    } else if (fs.existsSync(thumbnail + '.JPG')) {
       res.sendFile(req.params.memberId + '.JPG', {
         root: __dirname + '/../../photos/thumbnails'
       });
@@ -18,7 +22,11 @@ module.exports = {
       res.sendFile(req.params.memberId + '.jpg', {
         root: __dirname + '/../../photos/thumbnails'
       });
-    } else if (fs.existsSync(original + '.JPG')) {
+    } else if (fs.existsSync(original)) {
+      res.sendFile(req.params.memberId, {
+        root: __dirname + '/../../photos'
+      });
+    }  else if (fs.existsSync(original + '.JPG')) {
       res.sendFile(req.params.memberId + '.JPG', {
         root: __dirname + '/../../photos'
       });
