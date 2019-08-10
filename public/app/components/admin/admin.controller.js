@@ -644,11 +644,11 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                           // Set fees due message
                           if (insuranceDue || trainingFeesDue) {
                             if (insuranceDue && trainingFeesDue) {
-                              note = 'BOTH Insurance AND Training Fees DUE!';
+                              note ? note = note + ', ' + 'BOTH Insurance AND Training Fees DUE!' : note = 'BOTH Insurance AND Training Fees DUE!';
                             } else if (insuranceDue) {
-                              note = 'Insurance Fees DUE!';
+                              note ? note = note + ', ' + 'Insurance Fees DUE!' : note = 'Insurance Fees DUE!';
                             } else {
-                              note = 'Training Fees DUE!';
+                              note ? note = note + ', ' + 'Training Fees DUE!' : note = 'Training Fees DUE!';
                             }
                           }
 
