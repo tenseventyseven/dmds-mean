@@ -190,6 +190,7 @@ function adminController(
         active: true,
       },
       notes: {},
+      covid: {},
     };
 
     // Show add new member controls
@@ -233,6 +234,11 @@ function adminController(
         if (vm.memberData.membership.lockerExpiryDate) {
           vm.memberDates.lockerExpiry = new Date(
             vm.memberData.membership.lockerExpiryDate
+          );
+        }
+        if (vm.memberData.covid.checkedOn) {
+          vm.memberDates.covidCheckedOn = new Date(
+            vm.memberData.covid.checkedOn
           );
         }
 
@@ -303,6 +309,7 @@ function adminController(
         vm.memberData.person.dob = vm.memberDates.dob;
         vm.memberData.membership.commencementDate = vm.memberDates.commenced;
         vm.memberData.membership.lockerExpiryDate = vm.memberDates.lockerExpiry;
+        vm.memberData.covid.checkedOn = vm.memberDates.covidCheckedOn;
 
         // Save member data
         if (vm.doAdd) {
@@ -591,11 +598,13 @@ function adminController(
 
         _.forEach(data, function (attendance) {
           // Parse attendance for vm
-          var name = _.find(vm.members, {
+          var member = _.find(vm.members, {
             memberId: attendance.memberId,
-          }).person.name;
+          });
+          var name = member.person.name;
           var time = new Date(attendance.time);
           var activity = attendance.activity;
+          var vaccinated = member.covid.vaccinated ? "Y" : "N";
 
           // Check if fees due
           var note = "";
@@ -660,6 +669,7 @@ function adminController(
                         time,
                         activity,
                         note,
+                        vaccinated,
                       });
                     } else {
                       // Daily fees
@@ -708,6 +718,7 @@ function adminController(
                             time,
                             activity,
                             note,
+                            vaccinated,
                           });
                         });
                     }

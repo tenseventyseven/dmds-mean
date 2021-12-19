@@ -94,6 +94,19 @@ var MemberSchema = new Schema({
       default: null,
     },
   },
+  covid: {
+    vaccinated: {
+      type: Boolean,
+      default: false,
+    },
+    checkedOn: {
+      type: Date,
+    },
+    checkedBy: {
+      type: String,
+      trim: true,
+    },
+  },
 });
 
 module.exports = mongoose.model("Member", MemberSchema);

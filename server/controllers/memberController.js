@@ -10,6 +10,7 @@ module.exports = {
     if (req.body.person) data.person = req.body.person;
     if (req.body.notes) data.notes = req.body.notes;
     if (req.body.membership) data.membership = req.body.membership;
+    if (req.body.covid) data.covid = req.body.covid;
 
     data.save(function (err) {
       if (err) {
@@ -29,11 +30,11 @@ module.exports = {
   },
 
   // get all members
-  // but only return (_id, name, memberId) for speed
+  // but only return (_id, name, memberId, vaccinated) for speed
   getAll: function (req, res) {
     Member.find({})
       .sort("person.name")
-      .select("_id person.name memberId")
+      .select("_id person.name memberId covid.vaccinated")
       .exec(function (err, data) {
         if (err) res.send(err);
 
@@ -90,6 +91,7 @@ module.exports = {
       if (req.body.person) data.person = req.body.person;
       if (req.body.notes) data.notes = req.body.notes;
       if (req.body.membership) data.membership = req.body.membership;
+      if (req.body.covid) data.covid = req.body.covid;
 
       // save the member
       data.save(function (err) {

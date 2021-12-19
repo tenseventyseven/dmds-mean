@@ -43,6 +43,7 @@
                   <th>Time</th>
                   <th>Activity</th>
                   <th>Note</th>
+                  <th>Vaccinated</th>
                 </tr>
               </thead>
               <tr ng-repeat="attendance in admin.todayAttendance">
@@ -50,6 +51,7 @@
                 <td>{{ attendance.time | date:'medium'}}</td>
                 <td>{{ attendance.activity }}</td>
                 <td>{{ attendance.note }}</td>
+                <td>{{ attendance.vaccinated }}</td>
               </tr>
             </table>
           </div>
@@ -165,24 +167,24 @@
                   <label class="col-sm-2"></label>
                   <div class="col-sm-5">
                     <label class="checkbox-inline">
-                                            <input type="checkbox" ng-model="admin.memberData.membership.active">Active</label>
+                    <input type="checkbox" ng-model="admin.memberData.membership.active">Active</label>
                   </div>
                   <div class="col-sm-5">
                     <label class="checkbox-inline">
-                                            <input type="checkbox" ng-model="admin.memberData.membership.casual">Casual</label>
+                    <input type="checkbox" ng-model="admin.memberData.membership.casual">Casual</label>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="advertisingInput" class="col-sm-2 control-label">Found By:</label>
                   <div class="col-sm-10">
                     <select class="form-control" ng-model="admin.memberData.membership.advertising" id="advertisingInput">
-                                            <option>Other</option>
-                                            <option>Member Referred</option>
-                                            <option>Internet</option>
-                                            <option>Leaflet</option>
-                                            <option>Walked Past</option>
-                                            <option>Friend</option>
-                                        </select>
+                      <option>Other</option>
+                      <option>Member Referred</option>
+                      <option>Internet</option>
+                      <option>Leaflet</option>
+                      <option>Walked Past</option>
+                      <option>Friend</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -312,6 +314,31 @@
                 </table>
               </div>
             </div>
+          </uib-tab>
+          <uib-tab index="5" heading="Covid">
+            <fieldset ng-disabled="admin.readOnly">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2"></label>
+                    <div class="col-sm-10">
+                      <label class="checkbox-inline">
+                      <input type="checkbox" ng-model="admin.memberData.covid.vaccinated">Vaccinated</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label for="covidCheckedOnInput" class="col-sm-2 control-label">Checked On:</label>
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control border-none" ng-model="admin.memberDates.covidCheckedOn" id="covidCheckedOnInput">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="covidCheckedByInput" class="col-sm-2 control-label">Checked By:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="admin.memberData.covid.checkedBy" id="covidCheckedByInput">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           </uib-tab>
         </uib-tabset>
       </div>
