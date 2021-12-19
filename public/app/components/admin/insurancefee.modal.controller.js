@@ -1,8 +1,9 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .controller('insuranceFeeModalController', insuranceFeeModalController);
+  .controller("insuranceFeeModalController", insuranceFeeModalController);
 
 function insuranceFeeModalController($uibModalInstance, modalData) {
   var vm = this;
@@ -10,16 +11,16 @@ function insuranceFeeModalController($uibModalInstance, modalData) {
   vm.price = modalData.price;
   vm.months = modalData.months;
 
-  vm.save = function() {
+  vm.save = function () {
     // Return data from modal
     $uibModalInstance.close({
-      'startDate': vm.startDate,
-      'price': vm.price,
-      'months': vm.months
+      startDate: vm.startDate,
+      price: vm.price,
+      months: vm.months,
     });
   };
 
-  vm.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
+  vm.cancel = function () {
+    $uibModalInstance.dismiss("cancel");
   };
 }

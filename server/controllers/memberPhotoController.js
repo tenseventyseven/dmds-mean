@@ -1,43 +1,43 @@
-var fs = require('fs');
+var fs = require("fs");
 
 module.exports = {
-
   // get photo by member by ID
-  getByMemberId: function(req, res) {
+  getByMemberId: function (req, res) {
     // image base paths
-    var thumbnail = __dirname + '/../../photos/thumbnails/' + req.params.memberId;
-    var original = __dirname + '/../../photos/' + req.params.memberId;
+    var thumbnail =
+      __dirname + "/../../photos/thumbnails/" + req.params.memberId;
+    var original = __dirname + "/../../photos/" + req.params.memberId;
 
     // get thumbnail if exists, else original
     // try no extension, JPG then jpg
     if (fs.existsSync(thumbnail)) {
       res.sendFile(req.params.memberId, {
-        root: __dirname + '/../../photos/thumbnails'
+        root: __dirname + "/../../photos/thumbnails",
       });
-    } else if (fs.existsSync(thumbnail + '.JPG')) {
-      res.sendFile(req.params.memberId + '.JPG', {
-        root: __dirname + '/../../photos/thumbnails'
+    } else if (fs.existsSync(thumbnail + ".JPG")) {
+      res.sendFile(req.params.memberId + ".JPG", {
+        root: __dirname + "/../../photos/thumbnails",
       });
-    } else if (fs.existsSync(thumbnail + '.jpg')) {
-      res.sendFile(req.params.memberId + '.jpg', {
-        root: __dirname + '/../../photos/thumbnails'
+    } else if (fs.existsSync(thumbnail + ".jpg")) {
+      res.sendFile(req.params.memberId + ".jpg", {
+        root: __dirname + "/../../photos/thumbnails",
       });
     } else if (fs.existsSync(original)) {
       res.sendFile(req.params.memberId, {
-        root: __dirname + '/../../photos'
+        root: __dirname + "/../../photos",
       });
-    }  else if (fs.existsSync(original + '.JPG')) {
-      res.sendFile(req.params.memberId + '.JPG', {
-        root: __dirname + '/../../photos'
+    } else if (fs.existsSync(original + ".JPG")) {
+      res.sendFile(req.params.memberId + ".JPG", {
+        root: __dirname + "/../../photos",
       });
-    } else if (fs.existsSync(original + '.jpg')) {
-      res.sendFile(req.params.memberId + '.jpg', {
-        root: __dirname + '/../../photos'
+    } else if (fs.existsSync(original + ".jpg")) {
+      res.sendFile(req.params.memberId + ".jpg", {
+        root: __dirname + "/../../photos",
       });
     } else {
       // No image
-      console.log('ERROR: Missing ID photo for ' + req.params.memberId);
+      console.log("ERROR: Missing ID photo for " + req.params.memberId);
       res.status(400).send();
     }
-  }
+  },
 };

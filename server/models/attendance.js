@@ -1,34 +1,37 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 // Attendance schema
 var AttendanceSchema = new Schema({
   memberId: {
     type: Number,
-    required: true
+    required: true,
   },
   time: {
     type: Date,
-    required: true
+    required: true,
   },
   activity: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   session: {
     type: String,
     required: true,
-    trim: true
-  }
+    trim: true,
+  },
 });
 
 // Compound unique key (memberId, time)
-AttendanceSchema.index({
-  memberId: 1,
-  time: 1
-}, {
-  unique: true
-});
+AttendanceSchema.index(
+  {
+    memberId: 1,
+    time: 1,
+  },
+  {
+    unique: true,
+  }
+);
 
-module.exports = mongoose.model('Attendance', AttendanceSchema);
+module.exports = mongoose.model("Attendance", AttendanceSchema);

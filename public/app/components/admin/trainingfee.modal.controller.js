@@ -1,8 +1,9 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .controller('trainingFeeModalController', trainingFeeModalController);
+  .controller("trainingFeeModalController", trainingFeeModalController);
 
 function trainingFeeModalController($uibModalInstance, modalData) {
   var vm = this;
@@ -12,18 +13,18 @@ function trainingFeeModalController($uibModalInstance, modalData) {
   vm.months = modalData.months;
   vm.description = modalData.description;
 
-  vm.save = function() {
+  vm.save = function () {
     // Return data from modal
     $uibModalInstance.close({
-      'startDate': vm.startDate,
-      'price': vm.price,
-      'days': vm.days,
-      'months': vm.months,
-      'description': vm.description
+      startDate: vm.startDate,
+      price: vm.price,
+      days: vm.days,
+      months: vm.months,
+      description: vm.description,
     });
   };
 
-  vm.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
+  vm.cancel = function () {
+    $uibModalInstance.dismiss("cancel");
   };
 }

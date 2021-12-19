@@ -1,23 +1,26 @@
 "use strict";
 
-angular.module('appRoutes', [])
+angular
+  .module("appRoutes", [])
 
-  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  .config([
+    "$routeProvider",
+    "$locationProvider",
+    function ($routeProvider, $locationProvider) {
+      $routeProvider
 
-    $routeProvider
+        // home page
+        .when("/checkin", {
+          templateUrl: "app/components/checkin/checkin.view.html",
+          controller: "checkinController",
+        })
 
-      // home page
-      .when('/checkin', {
-        templateUrl: 'app/components/checkin/checkin.view.html',
-        controller: 'checkinController'
-      })
+        // admin page
+        .when("/admin", {
+          templateUrl: "app/components/admin/admin.view.html",
+          controller: "adminController",
+        });
 
-      // admin page
-      .when('/admin', {
-        templateUrl: 'app/components/admin/admin.view.html',
-        controller: 'adminController'
-      });
-
-    $locationProvider.html5Mode(true);
-
-  }]);
+      $locationProvider.html5Mode(true);
+    },
+  ]);

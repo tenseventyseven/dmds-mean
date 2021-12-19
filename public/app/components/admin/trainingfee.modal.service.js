@@ -1,12 +1,13 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .factory('trainingFeeModalService', trainingFeeModalService);
+  .factory("trainingFeeModalService", trainingFeeModalService);
 
 function trainingFeeModalService($uibModal, $log) {
   var service = {
-    openModal: openModal
+    openModal: openModal,
   };
 
   return service;
@@ -15,14 +16,14 @@ function trainingFeeModalService($uibModal, $log) {
   function openModal(modalData) {
     return $uibModal.open({
       animation: true,
-      templateUrl: 'app/components/admin/trainingfee.modal.view.html',
-      controller: 'trainingFeeModalController',
-      controllerAs: '$ctrl',
+      templateUrl: "app/components/admin/trainingfee.modal.view.html",
+      controller: "trainingFeeModalController",
+      controllerAs: "$ctrl",
       resolve: {
-        modalData: function() {
+        modalData: function () {
           return modalData;
-        }
-      }
+        },
+      },
     });
   }
 }

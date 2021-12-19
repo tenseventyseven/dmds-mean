@@ -1,30 +1,33 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 // InsuranceFee schema
 var InsuranceFeeSchema = new Schema({
   memberId: {
     type: Number,
-    required: true
+    required: true,
   },
   startDate: {
     type: Date,
-    required: true
+    required: true,
   },
   price: {
-    type: Number
+    type: Number,
   },
   months: {
-    type: Number
-  }
+    type: Number,
+  },
 });
 
 // Compound unique key (memberId, startDate)
-InsuranceFeeSchema.index({
-  memberId: 1,
-  startDate: 1
-}, {
-  unique: true
-});
+InsuranceFeeSchema.index(
+  {
+    memberId: 1,
+    startDate: 1,
+  },
+  {
+    unique: true,
+  }
+);
 
-module.exports = mongoose.model('InsuranceFee', InsuranceFeeSchema);
+module.exports = mongoose.model("InsuranceFee", InsuranceFeeSchema);

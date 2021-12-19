@@ -1,11 +1,12 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .controller('checkinController', checkinController);
+  .controller("checkinController", checkinController);
 
 function _arrayBufferToBase64(buffer) {
-  var binary = '';
+  var binary = "";
   var bytes = new Uint8Array(buffer);
   var len = bytes.byteLength;
   for (var i = 0; i < len; i++) {
@@ -14,7 +15,17 @@ function _arrayBufferToBase64(buffer) {
   return window.btoa(binary);
 }
 
-function checkinController(dateService, memberService, activityService, popupModalService, sessionService, trainingFeeService, insuranceFeeService, attendanceService, $log) {
+function checkinController(
+  dateService,
+  memberService,
+  activityService,
+  popupModalService,
+  sessionService,
+  trainingFeeService,
+  insuranceFeeService,
+  attendanceService,
+  $log
+) {
   var vm = this;
 
   // Functions
@@ -55,26 +66,31 @@ function checkinController(dateService, memberService, activityService, popupMod
     // Get members
     memberService
       .getActiveMembers() // Get list of member (name, id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         // Sort list for search box
         vm.members = data;
-        vm.memberNames = _.sortBy(data, 'person.name');
-        vm.memberNames = _.map(vm.members, 'person.name');
+        vm.memberNames = _.sortBy(data, "person.name");
+        vm.memberNames = _.map(vm.members, "person.name");
       });
   }
 
   function nameFilter(state, viewValue) {
-    var split = state.split(' ');
+    var split = state.split(" ");
     var firstName = split[0];
     var lastName = split[split.length - 1];
 
-    if (state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()) {
+    if (
+      state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()
+    ) {
       return true;
     }
 
-    if (lastName.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()) {
+    if (
+      lastName.substr(0, viewValue.length).toLowerCase() ==
+      viewValue.toLowerCase()
+    ) {
       return true;
     }
 
@@ -90,12 +106,12 @@ function checkinController(dateService, memberService, activityService, popupMod
       // Get member data
       vm.memberId = _.find(vm.members, {
         person: {
-          name: vm.nameInput
-        }
+          name: vm.nameInput,
+        },
       })._id;
       memberService
         .getMember(vm.memberId)
-        .then(function(response) {
+        .then(function (response) {
           var data = response.data;
 
           vm.memberData = data;
@@ -106,16 +122,18 @@ function checkinController(dateService, memberService, activityService, popupMod
           }
 
           // Get member photo
-          memberService
-            .getMemberPhoto(vm.memberData.memberId)
-            .then(function(response) {
-              vm.memberPhoto = 'data:image/jpeg;base64,' + _arrayBufferToBase64(response.data)
-            }, function(response) {
+          memberService.getMemberPhoto(vm.memberData.memberId).then(
+            function (response) {
+              vm.memberPhoto =
+                "data:image/jpeg;base64," + _arrayBufferToBase64(response.data);
+            },
+            function (response) {
               // No member photo
               vm.memberPhoto = undefined;
-            });
+            }
+          );
         })
-        .then(function() {
+        .then(function () {
           // Check if fees due
           var currentTime = new Date();
           var insuranceDue = false;
@@ -124,7 +142,7 @@ function checkinController(dateService, memberService, activityService, popupMod
           // Get latest insurance expiry date
           insuranceFeeService
             .getInsuranceFeesByMember(vm.memberData.memberId)
-            .then(function(response) {
+            .then(function (response) {
               var data = response.data;
 
               // Get latest fee to update expiry date
@@ -132,16 +150,18 @@ function checkinController(dateService, memberService, activityService, popupMod
                 var startDate = data[0].startDate;
                 var months = data[0].months;
 
-                if (currentTime >= dateService.getExpiryDate(startDate, months, 0)) {
+                if (
+                  currentTime >= dateService.getExpiryDate(startDate, months, 0)
+                ) {
                   insuranceDue = true;
                 }
               }
             })
-            .then(function() {
+            .then(function () {
               // Get latest training expiry date
               trainingFeeService
                 .getTrainingFeesByMember(vm.memberData.memberId)
-                .then(function(response) {
+                .then(function (response) {
                   var data = response.data;
 
                   // Get latest fee to update expiry date
@@ -152,18 +172,21 @@ function checkinController(dateService, memberService, activityService, popupMod
                       // Monthly fees
                       var months = data[0].months;
 
-                      if (currentTime >= dateService.getExpiryDate(startDate, months, 0)) {
+                      if (
+                        currentTime >=
+                        dateService.getExpiryDate(startDate, months, 0)
+                      ) {
                         trainingFeesDue = true;
                       }
 
                       // Set fees due message
                       if (insuranceDue || trainingFeesDue) {
                         if (insuranceDue && trainingFeesDue) {
-                          vm.feesDue = 'BOTH Insurance AND Training Fees DUE!';
+                          vm.feesDue = "BOTH Insurance AND Training Fees DUE!";
                         } else if (insuranceDue) {
-                          vm.feesDue = 'Insurance Fees DUE!';
+                          vm.feesDue = "Insurance Fees DUE!";
                         } else {
-                          vm.feesDue = 'Training Fees DUE!';
+                          vm.feesDue = "Training Fees DUE!";
                         }
                       }
                     } else {
@@ -171,8 +194,11 @@ function checkinController(dateService, memberService, activityService, popupMod
                       var days = data[0].days;
 
                       attendanceService
-                        .getAttendancesByMemberAndTime(vm.memberData.memberId, startDate)
-                        .then(function(response) {
+                        .getAttendancesByMemberAndTime(
+                          vm.memberData.memberId,
+                          startDate
+                        )
+                        .then(function (response) {
                           var data = response.data;
 
                           if (data >= days) {
@@ -181,20 +207,23 @@ function checkinController(dateService, memberService, activityService, popupMod
                           } else {
                             // Add days left message for member
                             if (vm.messageForMember == undefined) {
-                              vm.messageForMember = (days - data) + ' session(s) remaining';
+                              vm.messageForMember =
+                                days - data + " session(s) remaining";
                             } else {
-                              vm.messageForMember += ' | ' + (days - data) + ' session(s) remaining';
+                              vm.messageForMember +=
+                                " | " + (days - data) + " session(s) remaining";
                             }
                           }
 
                           // Set fees due message
                           if (insuranceDue || trainingFeesDue) {
                             if (insuranceDue && trainingFeesDue) {
-                              vm.feesDue = 'BOTH Insurance AND Training Fees DUE!';
+                              vm.feesDue =
+                                "BOTH Insurance AND Training Fees DUE!";
                             } else if (insuranceDue) {
-                              vm.feesDue = 'Insurance Fees DUE!';
+                              vm.feesDue = "Insurance Fees DUE!";
                             } else {
-                              vm.feesDue = 'Training Fees DUE!';
+                              vm.feesDue = "Training Fees DUE!";
                             }
                           }
                         });
@@ -214,45 +243,53 @@ function checkinController(dateService, memberService, activityService, popupMod
   function okClicked() {
     // Only do something if a activity has been selected
     if (vm.selectedActivity != undefined && vm.selectedActivity.length > 0) {
-
       // Get session
       vm.session = sessionService.getSession(new Date());
 
       // Open modal
       var modalData = {
         session: vm.session,
-        activity: vm.selectedActivity[0]
-
+        activity: vm.selectedActivity[0],
       };
       var modal = popupModalService.openModal(modalData);
 
-      modal.result.then(function() {
-        // OK
-        $log.info(vm.memberData.memberId + ' is doing ' + modalData.session + ' - ' + modalData.activity);
+      modal.result.then(
+        function () {
+          // OK
+          $log.info(
+            vm.memberData.memberId +
+              " is doing " +
+              modalData.session +
+              " - " +
+              modalData.activity
+          );
 
-        // Create attendance
-        var attendance = {
-          memberId: vm.memberData.memberId,
-          activity: modalData.activity,
-          session: modalData.session,
-          time: new Date()
-        };
+          // Create attendance
+          var attendance = {
+            memberId: vm.memberData.memberId,
+            activity: modalData.activity,
+            session: modalData.session,
+            time: new Date(),
+          };
 
-        attendanceService
-          .createAttendance(attendance)
-          .then(function(response) {
-            var data = response.data;
-            $log.info(data);
-          }, function(response) {
-            var data = response.data;
-            $log.error(data);
-          });
+          attendanceService.createAttendance(attendance).then(
+            function (response) {
+              var data = response.data;
+              $log.info(data);
+            },
+            function (response) {
+              var data = response.data;
+              $log.error(data);
+            }
+          );
 
-        // Reset
-        reset();
-      }, function() {
-        // Cancel, do nothing
-      });
+          // Reset
+          reset();
+        },
+        function () {
+          // Cancel, do nothing
+        }
+      );
     }
   }
 
@@ -264,22 +301,26 @@ function checkinController(dateService, memberService, activityService, popupMod
     initController();
 
     // Remove active from list items
-    $(".list-group-item").each(function(i, obj) {
-      $(obj).removeClass('active');
+    $(".list-group-item").each(function (i, obj) {
+      $(obj).removeClass("active");
     });
   }
 
   function deselectClassActivities() {
     // Remove active from list items
-    $("#classactivity-list-group").children(".list-group-item").each(function(i, obj) {
-      $(obj).removeClass('active');
-    });
+    $("#classactivity-list-group")
+      .children(".list-group-item")
+      .each(function (i, obj) {
+        $(obj).removeClass("active");
+      });
   }
 
   function deselectOtherActivities() {
     // Remove active from list items
-    $("#otheractivity-list-group").children(".list-group-item").each(function(i, obj) {
-      $(obj).removeClass('active');
-    });
+    $("#otheractivity-list-group")
+      .children(".list-group-item")
+      .each(function (i, obj) {
+        $(obj).removeClass("active");
+      });
   }
 }

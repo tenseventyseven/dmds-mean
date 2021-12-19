@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 // Member schema
@@ -7,85 +7,93 @@ var MemberSchema = new Schema({
     type: Number,
     unique: true,
     required: true,
-    min: 1
+    min: 1,
   },
   person: {
     name: {
       type: String,
       unique: true,
       required: true,
-      trim: true
+      trim: true,
     },
     address: {
       street: {
         type: String,
-        trim: true
+        trim: true,
       },
       city: {
         type: String,
-        trim: true
+        trim: true,
       },
       postcode: {
-        type: Number
-      }
+        type: Number,
+      },
     },
     contact: {
       home: {
-        type: String
+        type: String,
       },
       mobile: {
-        type: String
+        type: String,
       },
       email: {
         type: String,
-        trim: true
-      }
+        trim: true,
+      },
     },
     occupation: {
       type: String,
-      trim: true
+      trim: true,
     },
     dob: {
-      type: Date
-    }
+      type: Date,
+    },
   },
   notes: {
     privateComments: {
       type: String,
-      trim: true
+      trim: true,
     },
     messageForMember: {
       type: String,
-      trim: true
-    }
+      trim: true,
+    },
   },
   membership: {
     active: {
       type: Boolean,
       required: true,
-      default: true
+      default: true,
     },
     casual: {
       type: Boolean,
-      default: false
+      default: false,
     },
     advertising: {
       type: String,
       trim: true,
-      enum: ['', 'Other', 'Member Referred', 'Internet', 'Leaflet', 'Walked Past', 'Friend']
+      enum: [
+        "",
+        "Other",
+        "Member Referred",
+        "Internet",
+        "Leaflet",
+        "Walked Past",
+        "Friend",
+      ],
     },
     commencementDate: {
       type: Date,
-      default: null
+      default: null,
     },
     lockerNumber: {
-      type: Number
+      type: Number,
     },
     lockerExpiryDate: {
       type: Date,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 });
 
-module.exports = mongoose.model('Member', MemberSchema);
+module.exports = mongoose.model("Member", MemberSchema);

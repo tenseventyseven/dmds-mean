@@ -1,12 +1,13 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .factory('popupModalService', popupModalService);
+  .factory("popupModalService", popupModalService);
 
 function popupModalService($uibModal, $log) {
   var service = {
-    openModal: openModal
+    openModal: openModal,
   };
 
   return service;
@@ -15,14 +16,14 @@ function popupModalService($uibModal, $log) {
   function openModal(modalData) {
     return $uibModal.open({
       animation: true,
-      templateUrl: 'app/components/checkin/popup.modal.view.html',
-      controller: 'popupModalController',
-      controllerAs: '$ctrl',
+      templateUrl: "app/components/checkin/popup.modal.view.html",
+      controller: "popupModalController",
+      controllerAs: "$ctrl",
       resolve: {
-        modalData: function() {
+        modalData: function () {
           return modalData;
-        }
-      }
+        },
+      },
     });
   }
 }

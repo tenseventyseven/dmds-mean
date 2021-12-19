@@ -1,13 +1,14 @@
 "use strict";
 
-angular.module('app', [
-    'ui.bootstrap',
-    'ngRoute',
-    'ngAnimate',
-    'ngSanitize',
-    'appRoutes',
-    'listGroup'
+angular
+  .module("app", [
+    "ui.bootstrap",
+    "ngRoute",
+    "ngAnimate",
+    "ngSanitize",
+    "appRoutes",
+    "listGroup",
   ])
 
   // lodash support
-  .constant('_', window._);
+  .constant("_", window._);

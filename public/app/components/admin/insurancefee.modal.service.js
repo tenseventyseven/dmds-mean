@@ -1,12 +1,13 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .factory('insuranceFeeModalService', insuranceFeeModalService);
+  .factory("insuranceFeeModalService", insuranceFeeModalService);
 
 function insuranceFeeModalService($uibModal, $log) {
   var service = {
-    openModal: openModal
+    openModal: openModal,
   };
 
   return service;
@@ -15,14 +16,14 @@ function insuranceFeeModalService($uibModal, $log) {
   function openModal(modalData) {
     return $uibModal.open({
       animation: true,
-      templateUrl: 'app/components/admin/insurancefee.modal.view.html',
-      controller: 'insuranceFeeModalController',
-      controllerAs: '$ctrl',
+      templateUrl: "app/components/admin/insurancefee.modal.view.html",
+      controller: "insuranceFeeModalController",
+      controllerAs: "$ctrl",
       resolve: {
-        modalData: function() {
+        modalData: function () {
           return modalData;
-        }
-      }
+        },
+      },
     });
   }
 }

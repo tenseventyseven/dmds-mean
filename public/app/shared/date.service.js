@@ -1,12 +1,13 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .factory('dateService', dateService);
+  .factory("dateService", dateService);
 
 function dateService() {
   var service = {
-    getExpiryDate: getExpiryDate
+    getExpiryDate: getExpiryDate,
   };
 
   return service;

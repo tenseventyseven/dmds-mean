@@ -1,10 +1,21 @@
 "use strict";
 
-angular.module('app')
+angular
+  .module("app")
 
-  .controller('adminController', adminController);
+  .controller("adminController", adminController);
 
-function adminController(dateService, memberService, trainingFeeService, insuranceFeeService, attendanceService, confirmModalService, trainingFeeModalService, insuranceFeeModalService, $log) {
+function adminController(
+  dateService,
+  memberService,
+  trainingFeeService,
+  insuranceFeeService,
+  attendanceService,
+  confirmModalService,
+  trainingFeeModalService,
+  insuranceFeeModalService,
+  $log
+) {
   var vm = this;
   // Properties
   vm.members = {};
@@ -16,7 +27,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   vm.memberInsuranceFees = [];
   vm.memberAttendances = [];
   vm.memberPhoto = undefined;
-  vm.nameInput = '';
+  vm.nameInput = "";
   vm.doFind = false;
   vm.doAdd = false;
   vm.readOnly = false;
@@ -45,37 +56,43 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   init();
 
   function init() {
-    $log.debug('Init at ' + new Date());
+    $log.debug("Init at " + new Date());
 
     // Get all members
     memberService
       .getMembers() // Get list of member (name, id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         // Sort list for search box
         vm.members = data;
-        vm.memberNames = _.sortBy(data, 'person.name');
-        vm.memberNames = _.map(vm.members, 'person.name');
+        vm.memberNames = _.sortBy(data, "person.name");
+        vm.memberNames = _.map(vm.members, "person.name");
       });
   }
 
   function getTrainingFees(memberId) {
     trainingFeeService
       .getTrainingFeesByMember(memberId)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         vm.memberTrainingFees = data;
 
         // Get latest fee to update expiry date
-        if (vm.memberTrainingFees.length > 0 && !vm.memberTrainingFees[0].days) {
+        if (
+          vm.memberTrainingFees.length > 0 &&
+          !vm.memberTrainingFees[0].days
+        ) {
           var startDate = vm.memberTrainingFees[0].startDate;
           var months = vm.memberTrainingFees[0].months;
 
-          vm.memberDates.trainingFeesExpiry = dateService.getExpiryDate(startDate, months);
+          vm.memberDates.trainingFeesExpiry = dateService.getExpiryDate(
+            startDate,
+            months
+          );
         } else {
-          vm.memberDates.trainingFeesExpiry = 'N/A';
+          vm.memberDates.trainingFeesExpiry = "N/A";
         }
       });
   }
@@ -83,7 +100,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   function getInsuranceFees(memberId) {
     insuranceFeeService
       .getInsuranceFeesByMember(memberId)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         vm.memberInsuranceFees = data;
@@ -93,9 +110,12 @@ function adminController(dateService, memberService, trainingFeeService, insuran
           var startDate = vm.memberInsuranceFees[0].startDate;
           var months = vm.memberInsuranceFees[0].months;
 
-          vm.memberDates.insuranceFeesExpiry = dateService.getExpiryDate(startDate, months);
+          vm.memberDates.insuranceFeesExpiry = dateService.getExpiryDate(
+            startDate,
+            months
+          );
         } else {
-          vm.memberDates.insuranceFeesExpiry = 'N/A';
+          vm.memberDates.insuranceFeesExpiry = "N/A";
         }
       });
   }
@@ -103,7 +123,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   function getAttendances(memberId) {
     attendanceService
       .getAttendancesByMember(memberId)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         vm.memberAttendances = data;
@@ -113,7 +133,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   function getLatestAttendance(memberId) {
     attendanceService
       .getLatestAttendanceByMember(memberId)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         if (data.time) {
@@ -123,15 +143,20 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function nameFilter(state, viewValue) {
-    var split = state.split(' ');
+    var split = state.split(" ");
     var firstName = split[0];
     var lastName = split[split.length - 1];
 
-    if (state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()) {
+    if (
+      state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()
+    ) {
       return true;
     }
 
-    if (lastName.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase()) {
+    if (
+      lastName.substr(0, viewValue.length).toLowerCase() ==
+      viewValue.toLowerCase()
+    ) {
       return true;
     }
 
@@ -139,7 +164,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function addMemberClicked() {
-    $log.debug('Add member clicked at ' + new Date());
+    $log.debug("Add member clicked at " + new Date());
     // Clear member data first
     vm.memberId = undefined;
     vm.memberData = {};
@@ -148,25 +173,23 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     vm.memberInsuranceFees = [];
 
     // Clear any search input
-    vm.nameInput = '';
+    vm.nameInput = "";
 
     // Get next member ID
-    memberService
-      .getNext()
-      .then(function(response) {
-        var data = response.data;
+    memberService.getNext().then(function (response) {
+      var data = response.data;
 
-        vm.memberData.memberId = data;
-      });
+      vm.memberData.memberId = data;
+    });
 
     // New empty member
     vm.memberData = {
       memberId: undefined,
       person: {},
       membership: {
-        active: true
+        active: true,
       },
-      notes: {}
+      notes: {},
     };
 
     // Show add new member controls
@@ -174,7 +197,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function findMemberClicked() {
-    $log.debug('Find member clicked at ' + new Date());
+    $log.debug("Find member clicked at " + new Date());
     // Clear member data first
     vm.memberId = undefined;
     vm.memberData = {};
@@ -190,60 +213,64 @@ function adminController(dateService, memberService, trainingFeeService, insuran
       // Get member data
       vm.memberId = _.find(vm.members, {
         person: {
-          name: vm.nameInput
-        }
+          name: vm.nameInput,
+        },
       })._id;
-      memberService
-        .getMember(vm.memberId)
-        .then(function(response) {
-          var data = response.data;
+      memberService.getMember(vm.memberId).then(function (response) {
+        var data = response.data;
 
-          vm.memberData = data;
+        vm.memberData = data;
 
-          // Create date objects from date strings for use with view-model
-          if (vm.memberData.person.dob) {
-            vm.memberDates.dob = new Date(vm.memberData.person.dob);
+        // Create date objects from date strings for use with view-model
+        if (vm.memberData.person.dob) {
+          vm.memberDates.dob = new Date(vm.memberData.person.dob);
+        }
+        if (vm.memberData.membership.commencementDate) {
+          vm.memberDates.commenced = new Date(
+            vm.memberData.membership.commencementDate
+          );
+        }
+        if (vm.memberData.membership.lockerExpiryDate) {
+          vm.memberDates.lockerExpiry = new Date(
+            vm.memberData.membership.lockerExpiryDate
+          );
+        }
+
+        // Get member photo
+        memberService.getMemberPhoto(vm.memberData.memberId).then(
+          function (response) {
+            vm.memberPhoto =
+              "data:image/jpeg;base64," + _arrayBufferToBase64(response.data);
+          },
+          function (response) {
+            // No member photo
+            vm.memberPhoto = undefined;
           }
-          if (vm.memberData.membership.commencementDate) {
-            vm.memberDates.commenced = new Date(vm.memberData.membership.commencementDate);
-          }
-          if (vm.memberData.membership.lockerExpiryDate) {
-            vm.memberDates.lockerExpiry = new Date(vm.memberData.membership.lockerExpiryDate);
-          }
+        );
 
-          // Get member photo
-          memberService
-            .getMemberPhoto(vm.memberData.memberId)
-            .then(function(response) {
-              vm.memberPhoto = 'data:image/jpeg;base64,' + _arrayBufferToBase64(response.data)
-            }, function(response) {
-              // No member photo
-              vm.memberPhoto = undefined;
-            });
+        // Get member training fees
+        getTrainingFees(vm.memberData.memberId);
 
-          // Get member training fees
-          getTrainingFees(vm.memberData.memberId);
+        // Get member insurance fees
+        getInsuranceFees(vm.memberData.memberId);
 
-          // Get member insurance fees
-          getInsuranceFees(vm.memberData.memberId);
+        // Get latest member attendance
+        getLatestAttendance(vm.memberData.memberId);
 
-          // Get latest member attendance
-          getLatestAttendance(vm.memberData.memberId);
-
-          // Get all member attendances
-          getAttendances(vm.memberData.memberId);
-        });
+        // Get all member attendances
+        getAttendances(vm.memberData.memberId);
+      });
 
       // But don't allow editing by default
       vm.readOnly = true;
 
       // Clear search input
-      vm.nameInput = '';
+      vm.nameInput = "";
     }
   }
 
   function cancelMemberClicked() {
-    $log.debug('Cancel member clicked at ' + new Date());
+    $log.debug("Cancel member clicked at " + new Date());
 
     // Reset view model
     resetProperties();
@@ -253,26 +280,25 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function saveMemberClicked() {
-    $log.debug('Save member clicked at ' + new Date());
+    $log.debug("Save member clicked at " + new Date());
 
     // Modal
     var modalData;
     if (vm.doAdd) {
       modalData = {
-        type: 'okCancel',
-        message: 'Add new member ' + vm.memberData.person.name + '?'
+        type: "okCancel",
+        message: "Add new member " + vm.memberData.person.name + "?",
       };
     } else {
       modalData = {
-        type: 'okCancel',
-        message: 'Update existing member ' + vm.memberData.person.name + '?'
+        type: "okCancel",
+        message: "Update existing member " + vm.memberData.person.name + "?",
       };
     }
 
     // Open modal
-    var modal = confirmModalService
-      .openModal(modalData)
-      .result.then(function() {
+    var modal = confirmModalService.openModal(modalData).result.then(
+      function () {
         // Update member data with date objects from view-model
         vm.memberData.person.dob = vm.memberDates.dob;
         vm.memberData.membership.commencementDate = vm.memberDates.commenced;
@@ -281,70 +307,68 @@ function adminController(dateService, memberService, trainingFeeService, insuran
         // Save member data
         if (vm.doAdd) {
           // Adding new member
-          memberService
-            .createMember(vm.memberData)
-            .then(function() {
-              $log.info('Added member at: ' + new Date());
-              // Reset view model
-              resetProperties();
-              // Reinit
-              init();
-            });
+          memberService.createMember(vm.memberData).then(function () {
+            $log.info("Added member at: " + new Date());
+            // Reset view model
+            resetProperties();
+            // Reinit
+            init();
+          });
         } else {
           // Updating existing member
           memberService
             .updateMember(vm.memberId, vm.memberData)
-            .then(function() {
-              $log.info('Updated member at: ' + new Date());
+            .then(function () {
+              $log.info("Updated member at: " + new Date());
               // Reset view model
               resetProperties();
               // Reinit
               init();
             });
         }
-      }, function() {
-        $log.info('Confirm modal dismissed at: ' + new Date());
-      });
+      },
+      function () {
+        $log.info("Confirm modal dismissed at: " + new Date());
+      }
+    );
   }
 
   function deleteMemberClicked() {
-    $log.debug('Delete member clicked at ' + new Date());
+    $log.debug("Delete member clicked at " + new Date());
 
     // Modal
     var modalData = {
-      type: 'deleteCancel',
-      message: 'Delete existing member ' + vm.memberData.person.name + '?'
+      type: "deleteCancel",
+      message: "Delete existing member " + vm.memberData.person.name + "?",
     };
 
     // Open modal
-    var modal = confirmModalService
-      .openModal(modalData)
-      .result.then(function() {
+    var modal = confirmModalService.openModal(modalData).result.then(
+      function () {
         // Delete existing member
-        memberService
-          .deleteMember(vm.memberId)
-          .then(function() {
-            $log.info('Deleted member at: ' + new Date());
-            // Reset view model
-            resetProperties();
-            // Reinit
-            init();
-          });
-
-      }, function() {
-        $log.info('Delete member modal dismissed at: ' + new Date());
-      });
+        memberService.deleteMember(vm.memberId).then(function () {
+          $log.info("Deleted member at: " + new Date());
+          // Reset view model
+          resetProperties();
+          // Reinit
+          init();
+        });
+      },
+      function () {
+        $log.info("Delete member modal dismissed at: " + new Date());
+      }
+    );
   }
 
   function editMemberClicked() {
-    $log.debug('Edit member clicked at ' + new Date());
+    $log.debug("Edit member clicked at " + new Date());
 
     // Allow editing of member data
     vm.readOnly = false;
   }
 
   function addTrainingFeeClicked() {
-    $log.debug('Add training fee clicked at ' + new Date());
+    $log.debug("Add training fee clicked at " + new Date());
 
     // Modal data
     var modalData = {
@@ -352,20 +376,19 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     };
 
     // Open modal
-    var modal = trainingFeeModalService
-      .openModal(modalData)
-      .result.then(function(data) {
+    var modal = trainingFeeModalService.openModal(modalData).result.then(
+      function (data) {
         // Add fee
         trainingFeeService
           .createTrainingFee({
-            'memberId': vm.memberData.memberId,
-            'startDate': data.startDate,
-            'price': data.price,
-            'months': data.months,
-            'days': data.days,
-            'description': data.description
+            memberId: vm.memberData.memberId,
+            startDate: data.startDate,
+            price: data.price,
+            months: data.months,
+            days: data.days,
+            description: data.description,
           })
-          .then(function(response) {
+          .then(function (response) {
             var data = response.data;
 
             $log.info(data.message);
@@ -373,43 +396,44 @@ function adminController(dateService, memberService, trainingFeeService, insuran
             // Refresh member training fees
             getTrainingFees(vm.memberData.memberId);
           });
-      }, function(data) {
-        $log.info('Add training fee modal dismissed at: ' + new Date());
-      });
+      },
+      function (data) {
+        $log.info("Add training fee modal dismissed at: " + new Date());
+      }
+    );
   }
 
   function editTrainingFeeClicked(index) {
-    $log.debug('Edit training fee clicked at ' + new Date() + ' for ' + index);
+    $log.debug("Edit training fee clicked at " + new Date() + " for " + index);
 
     // Get fee
     trainingFeeService
       .getTrainingFee(vm.memberTrainingFees[index]._id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         // Modal data
         var modalData = {
-          'startDate': data.startDate,
-          'price': data.price,
-          'months': data.months,
-          'days': data.days,
-          'description': data.description
+          startDate: data.startDate,
+          price: data.price,
+          months: data.months,
+          days: data.days,
+          description: data.description,
         };
 
         // Open modal
-        var modal = trainingFeeModalService
-          .openModal(modalData)
-          .result.then(function(data) {
+        var modal = trainingFeeModalService.openModal(modalData).result.then(
+          function (data) {
             // Add fee
             trainingFeeService
               .updateTrainingFee(vm.memberTrainingFees[index]._id, {
-                'startDate': data.startDate,
-                'price': data.price,
-                'months': data.months,
-                'days': data.days,
-                'description': data.description
+                startDate: data.startDate,
+                price: data.price,
+                months: data.months,
+                days: data.days,
+                description: data.description,
               })
-              .then(function(response) {
+              .then(function (response) {
                 var data = response.data;
 
                 $log.info(data.message);
@@ -417,19 +441,23 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                 // Refresh member training fees
                 getTrainingFees(vm.memberData.memberId);
               });
-          }, function() {
-            $log.info('Edit training fee modal dismissed at: ' + new Date());
-          });
+          },
+          function () {
+            $log.info("Edit training fee modal dismissed at: " + new Date());
+          }
+        );
       });
   }
 
   function deleteTrainingFeeClicked(index) {
-    $log.debug('Delete training fee clicked at ' + new Date() + ' for ' + index);
+    $log.debug(
+      "Delete training fee clicked at " + new Date() + " for " + index
+    );
 
     // Remove fee
     trainingFeeService
       .deleteTrainingFee(vm.memberTrainingFees[index]._id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         $log.info(data.message);
@@ -440,7 +468,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function addInsuranceFeeClicked() {
-    $log.debug('Add insurance fee clicked at ' + new Date());
+    $log.debug("Add insurance fee clicked at " + new Date());
 
     // Modal data
     var modalData = {
@@ -448,18 +476,17 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     };
 
     // Open modal
-    var modal = insuranceFeeModalService
-      .openModal(modalData)
-      .result.then(function(data) {
+    var modal = insuranceFeeModalService.openModal(modalData).result.then(
+      function (data) {
         // Add fee
         insuranceFeeService
           .createInsuranceFee({
-            'memberId': vm.memberData.memberId,
-            'startDate': data.startDate,
-            'price': data.price,
-            'months': data.months
+            memberId: vm.memberData.memberId,
+            startDate: data.startDate,
+            price: data.price,
+            months: data.months,
           })
-          .then(function(response) {
+          .then(function (response) {
             var data = response.data;
 
             $log.info(data.message);
@@ -467,41 +494,42 @@ function adminController(dateService, memberService, trainingFeeService, insuran
             // Refresh member insurance fees
             getInsuranceFees(vm.memberData.memberId);
           });
-      }, function(data) {
-        $log.info('Add insurance fee modal dismissed at: ' + new Date());
-      });
+      },
+      function (data) {
+        $log.info("Add insurance fee modal dismissed at: " + new Date());
+      }
+    );
   }
 
   function editInsuranceFeeClicked(index) {
-    $log.debug('Edit insurance fee clicked at ' + new Date() + ' for ' + index);
+    $log.debug("Edit insurance fee clicked at " + new Date() + " for " + index);
 
     // Get fee
     insuranceFeeService
       .getInsuranceFee(vm.memberInsuranceFees[index]._id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         console.log(data);
 
         // Modal data
         var modalData = {
-          'startDate': data.startDate,
-          'price': data.price,
-          'months': data.months
+          startDate: data.startDate,
+          price: data.price,
+          months: data.months,
         };
 
         // Open modal
-        var modal = insuranceFeeModalService
-          .openModal(modalData)
-          .result.then(function(data) {
+        var modal = insuranceFeeModalService.openModal(modalData).result.then(
+          function (data) {
             // Add fee
             insuranceFeeService
               .updateInsuranceFee(vm.memberInsuranceFees[index]._id, {
-                'startDate': data.startDate,
-                'price': data.price,
-                'months': data.months
+                startDate: data.startDate,
+                price: data.price,
+                months: data.months,
               })
-              .then(function(response) {
+              .then(function (response) {
                 var data = response.data;
 
                 $log.info(data.message);
@@ -509,19 +537,23 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                 // Refresh member insurance fees
                 getInsuranceFees(vm.memberData.memberId);
               });
-          }, function() {
-            $log.info('Edit insurance fee modal dismissed at: ' + new Date());
-          });
+          },
+          function () {
+            $log.info("Edit insurance fee modal dismissed at: " + new Date());
+          }
+        );
       });
   }
 
   function deleteInsuranceFeeClicked(index) {
-    $log.debug('Delete insurance fee clicked at ' + new Date() + ' for ' + index);
+    $log.debug(
+      "Delete insurance fee clicked at " + new Date() + " for " + index
+    );
 
     // Remove fee
     insuranceFeeService
       .deleteInsuranceFee(vm.memberInsuranceFees[index]._id)
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
         $log.info(data.message);
@@ -533,18 +565,18 @@ function adminController(dateService, memberService, trainingFeeService, insuran
 
   function todayInYYYYMMDD() {
     var d = new Date(),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
       year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
 
-    return [year, month, day].join('');
+    return [year, month, day].join("");
   }
 
   function showAttendanceClicked() {
-    $log.debug('Show attendance clicked at ' + new Date());
+    $log.debug("Show attendance clicked at " + new Date());
 
     vm.showAttendance = true;
 
@@ -554,19 +586,19 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     // Get attendances
     attendanceService
       .getAttendancesForYYYYMMDD(todayInYYYYMMDD())
-      .then(function(response) {
+      .then(function (response) {
         var data = response.data;
 
-        _.forEach(data, function(attendance) {
+        _.forEach(data, function (attendance) {
           // Parse attendance for vm
           var name = _.find(vm.members, {
-            memberId: attendance.memberId
+            memberId: attendance.memberId,
           }).person.name;
           var time = new Date(attendance.time);
           var activity = attendance.activity;
 
           // Check if fees due
-          var note = '';
+          var note = "";
           var currentTime = new Date();
           var insuranceDue = false;
           var trainingFeesDue = false;
@@ -574,7 +606,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
           // Get latest insurance expiry date
           insuranceFeeService
             .getInsuranceFeesByMember(attendance.memberId)
-            .then(function(response) {
+            .then(function (response) {
               var data = response.data;
 
               // Get latest fee to update expiry date
@@ -582,16 +614,18 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                 var startDate = data[0].startDate;
                 var months = data[0].months;
 
-                if (currentTime >= dateService.getExpiryDate(startDate, months, 0)) {
+                if (
+                  currentTime >= dateService.getExpiryDate(startDate, months, 0)
+                ) {
                   insuranceDue = true;
                 }
               }
             })
-            .then(function() {
+            .then(function () {
               // Get latest training expiry date
               trainingFeeService
                 .getTrainingFeesByMember(attendance.memberId)
-                .then(function(response) {
+                .then(function (response) {
                   var data = response.data;
 
                   // Get latest fee to update expiry date
@@ -602,18 +636,21 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                       // Monthly fees
                       var months = data[0].months;
 
-                      if (currentTime >= dateService.getExpiryDate(startDate, months, 0)) {
+                      if (
+                        currentTime >=
+                        dateService.getExpiryDate(startDate, months, 0)
+                      ) {
                         trainingFeesDue = true;
                       }
 
                       // Set fees due message
                       if (insuranceDue || trainingFeesDue) {
                         if (insuranceDue && trainingFeesDue) {
-                          note = 'BOTH Insurance AND Training Fees DUE!';
+                          note = "BOTH Insurance AND Training Fees DUE!";
                         } else if (insuranceDue) {
-                          note = 'Insurance Fees DUE!';
+                          note = "Insurance Fees DUE!";
                         } else {
-                          note = 'Training Fees DUE!';
+                          note = "Training Fees DUE!";
                         }
                       }
 
@@ -622,15 +659,18 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                         name,
                         time,
                         activity,
-                        note
+                        note,
                       });
                     } else {
                       // Daily fees
                       var days = data[0].days;
 
                       attendanceService
-                        .getAttendancesByMemberAndTime(attendance.memberId, startDate)
-                        .then(function(response) {
+                        .getAttendancesByMemberAndTime(
+                          attendance.memberId,
+                          startDate
+                        )
+                        .then(function (response) {
                           var data = response.data;
 
                           if (data >= days) {
@@ -638,17 +678,27 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                             trainingFeesDue = true;
                           } else {
                             // Sessions remaining
-                            note = (days - data) + ' session(s) remaining';
+                            note = days - data + " session(s) remaining";
                           }
 
                           // Set fees due message
                           if (insuranceDue || trainingFeesDue) {
                             if (insuranceDue && trainingFeesDue) {
-                              note ? note = note + ', ' + 'BOTH Insurance AND Training Fees DUE!' : note = 'BOTH Insurance AND Training Fees DUE!';
+                              note
+                                ? (note =
+                                    note +
+                                    ", " +
+                                    "BOTH Insurance AND Training Fees DUE!")
+                                : (note =
+                                    "BOTH Insurance AND Training Fees DUE!");
                             } else if (insuranceDue) {
-                              note ? note = note + ', ' + 'Insurance Fees DUE!' : note = 'Insurance Fees DUE!';
+                              note
+                                ? (note = note + ", " + "Insurance Fees DUE!")
+                                : (note = "Insurance Fees DUE!");
                             } else {
-                              note ? note = note + ', ' + 'Training Fees DUE!' : note = 'Training Fees DUE!';
+                              note
+                                ? (note = note + ", " + "Training Fees DUE!")
+                                : (note = "Training Fees DUE!");
                             }
                           }
 
@@ -657,7 +707,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
                             name,
                             time,
                             activity,
-                            note
+                            note,
                           });
                         });
                     }
@@ -666,17 +716,16 @@ function adminController(dateService, memberService, trainingFeeService, insuran
             });
         });
       });
-
   }
 
   function refreshAttendanceClicked() {
-    $log.debug('Refresh attendance clicked at ' + new Date());
+    $log.debug("Refresh attendance clicked at " + new Date());
 
     showAttendanceClicked();
   }
 
   function cancelAttendanceClicked() {
-    $log.debug('Cancel attendance clicked at ' + new Date());
+    $log.debug("Cancel attendance clicked at " + new Date());
 
     // Reset view model
     resetProperties();
@@ -686,7 +735,7 @@ function adminController(dateService, memberService, trainingFeeService, insuran
   }
 
   function resetProperties() {
-    $log.debug('Reset properties at ' + new Date());
+    $log.debug("Reset properties at " + new Date());
 
     // Reset properties
     vm.memberId = undefined;
@@ -695,13 +744,12 @@ function adminController(dateService, memberService, trainingFeeService, insuran
     vm.memberTrainingFees = [];
     vm.memberInsuranceFees = [];
     vm.memberAttendances = [];
-    vm.nameInput = '';
+    vm.nameInput = "";
     vm.doAdd = false;
     vm.doFind = false;
     vm.readOnly = false;
     vm.showAttendance = false;
     vm.todayAttendance = [];
     vm.memberPhoto = undefined;
-
   }
 }

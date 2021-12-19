@@ -14,8 +14,8 @@ h1 {
 
 .page-header {
   padding: 10px;
-  background-color: #5BC0DE;
-  color: #FFFFFF;
+  background-color: #5bc0de;
+  color: #ffffff;
   border: 0px solid;
   border-radius: 5px;
 }
@@ -33,7 +33,7 @@ body.modal-open .modal .modal-dialog {
   background: #007399;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .dropdown-menu {
